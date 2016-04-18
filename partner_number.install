@@ -1,0 +1,62 @@
+<?php
+
+/**
+ * @file
+ * Install and uninstall handling of module.
+ */
+
+/**
+ * Implements hook_schema_alter().
+ */
+function partner_number_schema_alter(&$schema) {
+  $schema['users']['fields']['partner_num_ab'] = partner_number_alumni_bold_def();
+  $schema['users']['fields']['partner_num_e'] = partner_number_enterprise_def();
+}
+
+/**
+ * Implements hook_install().
+ */
+function partner_number_install() {
+  variable_set('partner_number_alumni_bold', 30);
+  variable_set('partner_number_enterprise', 30);
+
+  db_add_field('users', 'partner_num_ab', partner_number_alumni_bold_def());
+  db_add_field('users', 'partner_num_e', partner_number_enterprise_def());
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function partner_number_uninstall() {
+  variable_del('partner_number_alumni_bold');
+  variable_del('partner_number_enterprise');
+
+  db_drop_field('users', 'partner_num_ab');
+  db_drop_field('users', 'partner_num_e');
+}
+
+/**
+ * Helper function that returns a schema field definition for alumni bold partner number field.
+ */
+function partner_number_alumni_bold_def() {
+  return array(
+    'type' => 'char',
+    'length' => 50,
+    'not null' => FALSE,
+    'default' => '',
+    'description' => t('Alumni bold partner number.'),
+  );
+}
+
+/**
+ * Helper function that returns a schema field definition for enterprise partner number field.
+ */
+function partner_number_enterprise_def() {
+  return array(
+    'type' => 'char',
+    'length' => 50,
+    'not null' => FALSE,
+    'default' => '',
+    'description' => t('Enterprise partner number.'),
+  );
+}

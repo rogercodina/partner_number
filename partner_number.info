@@ -1,0 +1,8 @@
+name = Partner number
+description = It assigns an autoincremental partner number to users. It implements two different counters depending on user role.
+package = Administration
+core = 7.x
+
+configure = admin/config/people/partner_number
+
+version = "7.x-1.0"

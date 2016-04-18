@@ -1,0 +1,75 @@
+<?php
+
+/**
+ * @file
+ * Module main file.
+ */
+
+/**
+ * Include entity module integration.
+ */
+module_load_include('inc', 'partner_number', 'partner_number.entity');
+
+/**
+ * Include feeds module integration.
+ */
+module_load_include('inc', 'partner_number', 'partner_number.feeds');
+
+/**
+ * Implements hook_views_api().
+ */
+function partner_number_views_api() {
+  return array(
+    'api' => 2,
+    'path' => drupal_get_path('module', 'partner_number'),
+  );
+}
+
+/**
+ * Implements hook_permission().
+ */
+function partner_number_permission() {
+  return array(
+    'administer partner number' => array(
+      'title' => t('Administer partner number'),
+      'description' => t('Allows to change the next partner number to be assigned'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function partner_number_menu() {
+  $items = array();
+
+  $items['admin/config/people/partner_number'] = array(
+    'title' => 'Partner number configuration',
+    'description' => 'Change module settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('partner_number_admin_settings'),
+    'access arguments' => array('administer partner number'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'partner_number.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Assigns partner ID for Alumni Bold.
+ */
+function partner_number_generate_number_ab() {
+  $return = variable_get('partner_number_alumni_bold', 30);
+  variable_set('partner_number_alumni_bold', $return + 1);
+  return $return;
+}
+
+/**
+ * Assigns partner ID for Enterprise.
+ */
+function partner_number_generate_number_e() {
+  $return = variable_get('partner_number_enterprise', 30);
+  variable_set('partner_number_enterprise', $return + 1);
+  return $return;
+}
